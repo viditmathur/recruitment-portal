@@ -21,7 +21,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());
 
 app.use('/api',routes);
-
+app.get('/',(req,res,next)=>{
+  res.send('Welcome to your Application')
+})
 app.listen(port, () => {
     console.log('Server is up and running on port numner ' + port);
 });
