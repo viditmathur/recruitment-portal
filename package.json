@@ -4,7 +4,8 @@
   "description": "Backend code hosted on 8080 for mock recruitment portal",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "author": "Vidit Mathur",
   "license": "ISC",
