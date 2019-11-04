@@ -2,6 +2,8 @@
     "env":{
         "PORT":3000,
         "JWT_KEY":"secretkey",
-        "DATABASEURL":""
+        "password":"",
+        "base":"mongodb+srv://vidit:",
+        "final":"@recruitmentapp-vutgm.mongodb.net/test?retryWrites=true&w=majority"
     }
 }
