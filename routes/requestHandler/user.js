@@ -1,5 +1,5 @@
 var express=require('express');
-var routes=express.Router();
+var router=express.Router();
 var user=require('../../models/user');
 
 
@@ -89,4 +89,4 @@ router.post('/login',(req, res, next) => {
 });
 
 
-module.exports=routes;
+module.exports=router;

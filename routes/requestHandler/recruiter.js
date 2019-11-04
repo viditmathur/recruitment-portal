@@ -1,7 +1,7 @@
 var express=require('express');
-var routes=express.Router();
+var router=express.Router();
 var recruiter=require('../../models/recruiter');
-
+var checkauth = require('./../../middleware/checkAuth');
 
 
 
@@ -42,4 +42,4 @@ router.post('/',checkauth,(req,res,next)=>{
     });
 });
 
-module.exports=routes;
+module.exports=router;

@@ -1,9 +1,10 @@
 var express=require('express');
-var routes=express.Router();
+var router=express.Router();
 var jobDetails=require('../../models/jobDetails');
 var recruiterJob=require('../../models/recruiterJobMapping');
 var seekerJob=require('../../models/jobSeekerMapping');
 var seeker=require('../../models/seeker');
+var checkauth = require('./../../middleware/checkAuth');
 
 
 
@@ -111,4 +112,4 @@ router.get('/applicantList/:id',checkauth,(req,res,next)=>{
     });
 });
 
-module.exports=routes;
+module.exports=router;
