@@ -1,12 +1,11 @@
 var express=require('express');
-var router=express.Router();
-var seeker=require('../../models/seeker');
-var checkauth = require('./../../middleware/checkAuth');
+var seeker=require('../models/seeker');
+var checkauth = require('./../middleware/checkAuth');
 
 
 
 
-router.get('/:id',checkauth,(req,res,next)=>{
+exports.getSeekerDetails= ('/:id',checkauth,(req,res,next) =>{
     seeker.findOne({_id:req.params.id}).exec(function(err,detials){
         if (err){
             console.log(err);
@@ -20,7 +19,7 @@ router.get('/:id',checkauth,(req,res,next)=>{
 });
 
 
-router.post('/',checkauth,(req,res,next)=>{
+exports.postSeekerDetails=('/',checkauth,(req,res,next)=>{
     const seeker = new seekerSchema({
         _id: req.body.id,
         email:req.body.email,
@@ -46,5 +45,3 @@ router.post('/',checkauth,(req,res,next)=>{
         });
     });
 });
-
-module.exports=router;

@@ -1,11 +1,10 @@
 var express=require('express');
-var router=express.Router();
-var user=require('../../models/user');
+var user=require('../models/user');
 var jwt=require('jsonwebtoken');
+var bcrypt=require('bcrypt');
 
-
-router.post('/signup', (req, res, next) => {
-    user.findOne({_id: req.body.email })
+exports.signup =  (req, res) => {
+    user.find({email: req.body.email })
         .exec()
         .then(user => {
         if (user.length >= 1) {
@@ -14,14 +13,14 @@ router.post('/signup', (req, res, next) => {
             });
         } 
         else {
-            bcrypt.hash(req.body.password, 10, (err, hash) => {
+            bcrypt.hash(req.body.password, 10, (err,hash) => {
                 if (err) {
                     return res.status(500).json({
                         error: err
                     });
                 } else {
                     const user = new userSchema({
-                        _id: req.body.id,
+                        _id:req.body.id,
                         email:req.body.email,
                         password: hash,
                         role: req.body.role
@@ -35,19 +34,25 @@ router.post('/signup', (req, res, next) => {
                     })
                         .catch(err => {
                         console.log(err);
-                        res.status(500).json({
+                        res.status(400).json({
                             error: err
                         });
                     });
                 }
             });
         }
-    });
-});
+    })
+    .catch(err=>{
+        console.log(err); 
+        res.status(400).json({
+            error: err
+        });
+    })
+};
 
-
-router.post('/login',(req, res, next) => {
-    user.find({ email: req.body.email })
+exports.login=(req, res) => {
+    console.log("login route ")
+    user.findOne({ email: req.body.email })
         .exec()
         .then(user => {
         if (user.length < 1) {
@@ -87,7 +92,4 @@ router.post('/login',(req, res, next) => {
             error: err
         });
     });
-});
-
-
-module.exports=router;
+}

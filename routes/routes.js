@@ -1,9 +1,9 @@
 var express=require('express');
 var router=express.Router();
-var user=require('./requestHandler/user');
-var recruiter=require('./requestHandler/recruiter');
-var seeker=require('./requestHandler/seeker');
-var job=require('./requestHandler/job');
+var user=require('./user');
+var recruiter=require('./recruiter');
+var seeker=require('./seeker');
+var job=require('./jobs');
 
 
 router.use('/user',user);

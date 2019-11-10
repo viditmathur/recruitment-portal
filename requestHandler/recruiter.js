@@ -1,11 +1,10 @@
 var express=require('express');
-var router=express.Router();
-var recruiter=require('../../models/recruiter');
-var checkauth = require('./../../middleware/checkAuth');
+var recruiter=require('../models/recruiter');
+var checkauth = require('./../middleware/checkAuth');
 
 
 
-router.get('/:id',checkauth,(req,res,next)=>{
+exports.getRecruiterDetails=('/:id',checkauth,(req,res,next)=>{
     recruiter.findOne({_id:req.params.id}).exec(function(err,detials){
         if (err){
             console.log(err);
@@ -18,7 +17,7 @@ router.get('/:id',checkauth,(req,res,next)=>{
     });
 });
 
-router.post('/',checkauth,(req,res,next)=>{
+exports.postRecruiterDetails=('/',checkauth,(req,res,next)=>{
     const recruiter = new recruiterSchema({
         _id: req.body.id,
         email:req.body.email,
@@ -41,5 +40,3 @@ router.post('/',checkauth,(req,res,next)=>{
         });
     });
 });
-
-module.exports=router;

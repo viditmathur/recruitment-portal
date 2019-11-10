@@ -1,15 +1,14 @@
 var express=require('express');
-var router=express.Router();
-var jobDetails=require('../../models/jobDetails');
-var recruiterJob=require('../../models/recruiterJobMapping');
-var seekerJob=require('../../models/jobSeekerMapping');
-var seeker=require('../../models/seeker');
-var checkauth = require('./../../middleware/checkAuth');
+var jobDetails=require('../models/jobDetails');
+var recruiterJob=require('../models/recruiterJobMapping');
+var seekerJob=require('../models/jobSeekerMapping');
+var seeker=require('../models/seeker');
+var checkauth = require('./../middleware/checkAuth');
 
 
 
 
-router.get('/',checkauth,(req,res,next)=>{
+exports.getAllJobsDetails=('/',checkauth,(req,res,next)=>{
     jobDetails.find({}).exec(function(err,detials){
         if (err){
             console.log(err);
@@ -22,7 +21,7 @@ router.get('/',checkauth,(req,res,next)=>{
     });
 });
 
-router.get('/:id',checkauth,(req,res,next)=>{
+exports.getJobDetails=('/:id',checkauth,(req,res,next)=>{
     jobDetails.findOne({_id:req.params.id}).exec(function(err,detials){
         if (err){
             console.log(err);
@@ -36,7 +35,7 @@ router.get('/:id',checkauth,(req,res,next)=>{
 });
 
 
-router.post('/',checkauth,(req,res,next)=>{
+exports.postJob=('/',checkauth,(req,res,next)=>{
     const jobDetails = new jobSchema({
         _id: req.body.id,
         role:req.body.role,
@@ -61,7 +60,7 @@ router.post('/',checkauth,(req,res,next)=>{
 });
 
 
-router.get('/jobList/:id',checkauth,(req,res,next)=>{
+exports.getJobList=('/:id',checkauth,(req,res,next)=>{
     recruiterJob.find({recruiterId:req.params.id}).exec(function(err,detials){
         if (err){
             console.log(err);
@@ -87,7 +86,7 @@ router.get('/jobList/:id',checkauth,(req,res,next)=>{
 });
 
 
-router.get('/applicantList/:id',checkauth,(req,res,next)=>{
+exports.getApplicantList=('/:id',checkauth,(req,res,next)=>{
     seekerJob.find({jobId:req.params.id}).exec(function(err,detials){
         if (err){
             console.log(err);
@@ -111,5 +110,3 @@ router.get('/applicantList/:id',checkauth,(req,res,next)=>{
         }
     });
 });
-
-module.exports=router;
