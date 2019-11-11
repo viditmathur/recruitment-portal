@@ -1,9 +1,10 @@
 {
     "env":{
+        "SERVER":"http://localhost:3306",
+        "DATABASE":"recruit",
+        "USER":"vidit",
+        "PASSWORD":"passowrd",
         "PORT":3000,
-        "JWT_KEY":"secretkey",
-        "password":"viditmathur",
-        "base":"mongodb+srv://vidit:",
-        "final":"@recruitmentapp-vutgm.mongodb.net/test?retryWrites=true&w=majority"
+        "JWT_KEY":"secretkey"
     }
 }
