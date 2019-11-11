@@ -1,66 +1,44 @@
 var express=require('express');
-var user=require('../models/user');
 var jwt=require('jsonwebtoken');
 var bcrypt=require('bcrypt');
+var sql = require('mysql');
+var db = require('../controllers/connection')
 
-exports.signup =  (req, res) => {
-    user.find({email: req.body.email })
-        .exec()
-        .then(user => {
-        if (user.length >= 1) {
-            return res.status(409).json({
-                message: "Mail exists"
-            });
-        } 
-        else {
+
+exports.signup =  (req, res) => {    
             bcrypt.hash(req.body.password, 10, (err,hash) => {
                 if (err) {
                     return res.status(500).json({
                         error: err
                     });
                 } else {
-                    const user = new userSchema({
-                        _id:req.body.id,
-                        email:req.body.email,
-                        password: hash,
-                        role: req.body.role
-                    });
-                    user.save()
-                        .then(result => {
+                    const user = {
+                        "id":req.body.id,
+                        "email":req.body.email,
+                        "password": hash,
+                        "role": req.body.role
+                    }
+                    var string = "insert into user values('"+user.email+"','"+user.role+"','"+user.password+"');";
+                    db.query(string, function (err, result) {
+                        if (err) throw err;
                         console.log(result);
-                        res.status(201).json({
-                            message: "User created"
-                        });
-                    })
-                        .catch(err => {
-                        console.log(err);
-                        res.status(400).json({
-                            error: err
-                        });
-                    });
+                      });
                 }
-            });
-        }
-    })
-    .catch(err=>{
-        console.log(err); 
-        res.status(400).json({
-            error: err
-        });
-    })
+            })
 };
 
 exports.login=(req, res) => {
-    console.log("login route ")
-    user.findOne({ email: req.body.email })
-        .exec()
-        .then(user => {
-        if (user.length < 1) {
-            return res.status(401).json({
-                message: "Auth failed"
-            });
-        }
-        bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+  var user = {
+        "id":req.body.id,
+        "email":req.body.email,
+        "password": hash,
+        "role": req.body.role
+    }
+    var string = "select * form user where email='"+user.email+"');";
+    db.query(string, function (err, resultSet) {
+        if (err) throw err;
+    
+        bcrypt.compare(req.body.password, resultSet.password, (err, result) => {
             if (err) {
                 return res.status(401).json({
                     message: "Auth failed"
@@ -68,7 +46,7 @@ exports.login=(req, res) => {
             }
             if (result) {
                 const token = jwt.sign({
-                    email: user[0].email
+                    email: resultSet.email
                 },
                 process.env.JWT_KEY,{
                     expiresIn: "1h"
@@ -76,20 +54,15 @@ exports.login=(req, res) => {
                 return res.status(200).json({
                     message: "Auth successful",
                     token: token,
-                    name: user[0].name,
-                    UserId: user[0]._id,
-                    role: user[0].role,
+                    name: resultSet.name,
+                    UserId: resultSet.email,
+                    role: resultSet.role,
                 });
             }
             res.status(401).json({
                 message: "Auth failed !!!"
             });
         });
-    })
-        .catch(err => {
-        console.log(err);
-        res.status(500).json({
-            error: err
-        });
     });
+
 }

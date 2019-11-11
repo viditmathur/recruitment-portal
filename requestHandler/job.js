@@ -1,112 +1,94 @@
 var express=require('express');
-var jobDetails=require('../models/jobDetails');
-var recruiterJob=require('../models/recruiterJobMapping');
-var seekerJob=require('../models/jobSeekerMapping');
-var seeker=require('../models/seeker');
 var checkauth = require('./../middleware/checkAuth');
 
 
 
 
 exports.getAllJobsDetails=('/',checkauth,(req,res,next)=>{
-    jobDetails.find({}).exec(function(err,detials){
-        if (err){
-            console.log(err);
-            res.send("error occured. check console for details");              
-        }
-        else{
-            console.log("Entry found");
-            res.json(detials);
-        }
-    });
-});
-
-exports.getJobDetails=('/:id',checkauth,(req,res,next)=>{
-    jobDetails.findOne({_id:req.params.id}).exec(function(err,detials){
-        if (err){
-            console.log(err);
-            res.send("error occured. check console for details");              
-        }
-        else{
-            console.log("Entry found");
-            res.json(detials);
-        }
-    });
-});
-
-
-exports.postJob=('/',checkauth,(req,res,next)=>{
-    const jobDetails = new jobSchema({
-        _id: req.body.id,
-        role:req.body.role,
-        experience: req.body.experience,
-        organisation: req.body.organisation,
-        skills: req.body.skills,
-        
-    });
-    jobDetails.save()
-        .then(result => {
-        console.log(result);
-        res.status(201).json({
-            message: "Job created"
-        });
-    })
-        .catch(err => {
-        console.log(err);
-        res.status(500).json({
-            error: err
-        });
-    });
-});
-
-
-exports.getJobList=('/:id',checkauth,(req,res,next)=>{
-    recruiterJob.find({recruiterId:req.params.id}).exec(function(err,detials){
+    var string = "select * form jobDetails );";
+    db.query(string, function (err, resultSet) {
+    
         if (err){
             console.log(err);
             res.send("error occured. check console for details");              
         }
         else{
             console.log("Entries found");
-            details.forEach(entry => {
-                jobDetails.findOne({_id:entry.jobId}).exec((err,jobDetails)=>{
-                    if(err){
-                        console.log(err);
-                        res.send("error occured. check console for details");
-                    }
-                    else{
-                        console.log("Entry found");
-                        details["jobList"].push(jobDetails);
-                    }
-                })
-            });
-            res.json(detials);
+            res.json(resultSet);
+        }
+    });
+   
+});
+
+exports.getJobDetails=('/:id',checkauth,(req,res,next)=>{
+    var string = "select * form jobDetails where id='"+req.body.id+"');";
+    db.query(string, function (err, resultSet) {
+    
+        if (err){
+            console.log(err);
+            res.send("error occured. check console for details");              
+        }
+        else{
+            console.log("Entry found");
+            res.json(resultSet);
+        }
+    });
+   
+});
+
+
+exports.postJob=('/',checkauth,(req,res,next)=>{
+    const jobDetails = new jobSchema({
+        "id": req.body.id,
+        "role":req.body.role,
+        "experience": req.body.experience,
+        "organisation": req.body.organisation,
+        "skills": req.body.skills,
+        
+    });
+    var string = "insert into jobDetails values('"+jobDetails.id+"','"+jobDetails.role+"','"+jobDetails.experience+"','"+jobDetails.organisation+"','"+jobDetails.skills+"');";
+    db.query(string, function (err, resultSet) {
+        if (err){
+            console.log(err);
+            res.send("error occured. check console for details");              
+        }
+        else{
+            console.log("Entry inserted");
+            res.json(resultSet);
+        }
+    });
+    
+});
+
+
+exports.getJobList=('/:id',checkauth,(req,res,next)=>{
+    var string = "select j.id, j.name from recruiterJobMapping rJ, jobDetails j join on rJ.jobId=j.jobId having rJ.recruiterId="+req.params.id+"";
+    
+    db.query(string, function (err, resultSet) {
+        if (err){
+            console.log(err);
+            res.send("error occured. check console for details");              
+        }
+        else{
+            console.log("Entries Found");
+            res.json(resultSet);
         }
     });
 });
 
 
 exports.getApplicantList=('/:id',checkauth,(req,res,next)=>{
-    seekerJob.find({jobId:req.params.id}).exec(function(err,detials){
+    var string = "select s.id, s.name, s.email from jobSeekerMapping jS, seeker s join on jS.seekerId=s.id having jS.jobId="+req.params.id+"";
+    
+    db.query(string, function (err, resultSet) {
         if (err){
             console.log(err);
             res.send("error occured. check console for details");              
         }
         else{
-            console.log("Entries found");
-            details.forEach(entry => {
-                seeker.findOne({_id:entry.seekerId}).exec((err,seekerDetails)=>{
-                    if(err){
-                        console.log(err);
-                        res.send("error occured. check console for details");
-                    }
-                    else{
-                        console.log("Entry found");
-                        details["applicantList"].push(seekerDetails);
-                    }
-                })
-            });
-            res.json(detials);
+            console.log("Entries Found");
+            res.json(resultSet);
         }
     });
+    
 });

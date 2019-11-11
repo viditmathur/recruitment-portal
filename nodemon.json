@@ -1,6 +1,6 @@
 {
     "env":{
-        "SERVER":"http://localhost:3306",
+        "SERVER":"localhost",
         "DATABASE":"recruit",
         "USER":"vidit",
         "PASSWORD":"passowrd",

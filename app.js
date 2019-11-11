@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const db=require('./database/connection');
+const db=require('./controllers/connection');
 const userRoutes =  require('./routes/user');
 const jobRoutes =  require('./routes/jobs');
 const seekerRoutes =  require('./routes/seeker');
@@ -31,7 +31,7 @@ app.get('/',(req,res,next)=>{
   res.send('Welcome to your Application')
 })
 app.listen(port, () => {
-  db.connection();
+    db.connect();
   // MongoClient.connect(uri, { useNewUrlParser: true }, (error, client) => {
   //   if(error) {
   //       console.log(error);
